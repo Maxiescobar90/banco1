@@ -87,4 +87,19 @@ public class ClienteController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @PostMapping("/{clienteId}/asignarSucursal")
+    public ResponseEntity<ClienteDTO> asignarSucursalACliente(
+            @RequestParam Long clienteId,
+            @RequestParam Long sucursalId) {
+
+        Cliente clienteActualizado = clienteService.asignarSucursalACliente(clienteId, sucursalId);
+
+        if (clienteActualizado != null) {
+            ClienteDTO clienteDTO = modelMapper.map(clienteActualizado, ClienteDTO.class);
+            return new ResponseEntity<>(clienteDTO, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

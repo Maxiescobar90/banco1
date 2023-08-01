@@ -8,10 +8,7 @@ import java.util.Random;
 
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 @SuperBuilder
 public abstract class Cuenta {
 
@@ -36,6 +33,10 @@ public abstract class Cuenta {
         String numeroUnico = String.format("%04d", random.nextInt(10000)); // Genera un número aleatorio de 4 dígitos
         return "Cuenta-" + this.cliente.getId() + "-" + numeroUnico;
     }
+
+    public Cuenta() {
+    }
+
 
 
 }

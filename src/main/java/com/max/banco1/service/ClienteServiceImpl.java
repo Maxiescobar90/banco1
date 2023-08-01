@@ -5,9 +5,11 @@ import com.max.banco1.DTO.CuentaAhorroDTO;
 import com.max.banco1.entities.Cliente;
 import com.max.banco1.entities.CuentaAhorro;
 import com.max.banco1.entities.CuentaCorriente;
+import com.max.banco1.entities.Sucursal;
 import com.max.banco1.repositories.ClienteRepository;
 import com.max.banco1.repositories.CuentaAhorroRepository;
 import com.max.banco1.repositories.CuentaCorrienteRepository;
+import com.max.banco1.repositories.SucursalRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,16 +23,18 @@ import java.util.stream.Collectors;
 public class ClienteServiceImpl implements ClienteService {
     private final ClienteRepository clienteRepository;
     private final CuentaAhorroRepository cuentaAhorroRepository;
-
     private final CuentaCorrienteRepository cuentaCorrienteRepository;
+
+    private final SucursalRepository sucursalRepository;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public ClienteServiceImpl(ClienteRepository clienteRepository, ModelMapper modelMapper, CuentaCorrienteRepository cuentaCorrienteRepository, CuentaAhorroRepository cuentaAhorroRepository) {
+    public ClienteServiceImpl(ClienteRepository clienteRepository, ModelMapper modelMapper, CuentaCorrienteRepository cuentaCorrienteRepository, CuentaAhorroRepository cuentaAhorroRepository, SucursalRepository sucursalRepository) {
         this.clienteRepository = clienteRepository;
         this.modelMapper = modelMapper;
         this.cuentaCorrienteRepository = cuentaCorrienteRepository;
         this.cuentaAhorroRepository = cuentaAhorroRepository;
+        this.sucursalRepository = sucursalRepository;
     }
 
 
@@ -131,6 +135,18 @@ public class ClienteServiceImpl implements ClienteService {
         cliente = clienteRepository.save(cliente); // Guardar el cliente actualizado
 
         return modelMapper.map(cliente, ClienteDTO.class);
+    }
+
+    public Cliente asignarSucursalACliente(Long clienteId, Long sucursalId) {
+        Cliente cliente = clienteRepository.findById(clienteId).orElse(null);
+        Sucursal sucursal = sucursalRepository.findById(sucursalId).orElse(null);
+
+        if (cliente != null && sucursal != null) {
+            cliente.setSucursal(sucursal);
+            return clienteRepository.save(cliente);
+        }
+
+        return null; // Cliente o sucursal no encontrados
     }
 
 

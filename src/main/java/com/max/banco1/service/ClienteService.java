@@ -20,4 +20,6 @@ public interface ClienteService {
 
     ClienteDTO agregarCuentaAhorro(Long clienteId, CuentaAhorroDTO cuentaAhorroDTO);
 
+    public Cliente asignarSucursalACliente(Long clienteId, Long sucursalId);
+
 }
